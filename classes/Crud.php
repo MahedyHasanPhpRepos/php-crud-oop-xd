@@ -18,15 +18,22 @@ class Crud extends DbConfig implements CrudInterface
     public $entry_by;
 
 
-    public function display()
-    {
-        echo "display";
-    }
+
 
 
     public function read()
     {
         $stmt = $this->connection->prepare("select * from Buyers order by id desc");
+
+        $stmt->execute();
+        $users = $stmt->fetchAll();
+        return $users;
+    }
+
+
+    public function search($userId) {
+        // echo $userId ; 
+        $stmt = $this->connection->prepare("select * FROM Buyers WHERE id = {$userId}");
         $stmt->execute();
         $users = $stmt->fetchAll();
         return $users;
@@ -82,49 +89,6 @@ class Crud extends DbConfig implements CrudInterface
         }
     }
 
-
-    public function show($id)
-    {
-        try {
-            $sql_query = "select * from Users where id = :id";
-            $stmt = $this->connection->prepare($sql_query);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $user;
-        } catch (PDOException $e) {
-            echo "Error Message: " . $e->getMessage();
-        }
-    }
-    public function update($id)
-    {
-        // echo $id ; 
-
-        try {
-
-            $sql_query = "update Users 
-            set 
-            name = :name,
-            email = :email ,
-            age = :age
-            where id = :id";
-            $stmt = $this->connection->prepare($sql_query);
-
-            $name = $this->sanitize_data($this->name);
-            // $age = $this->sanitize_data($this->age);
-            $email = $this->sanitize_data($this->email);
-
-            $stmt->bindParam(":name", $name);
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":age", $age);
-            $stmt->bindParam(":id", $id);
-            $stmt->execute();
-
-            return true;
-        } catch (PDOException $e) {
-            echo "Error Message: " . $e->getMessage();
-        }
-    }
     public function delete($id)
     {
         try {

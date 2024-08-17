@@ -6,9 +6,6 @@ interface ValidationInterface
     public function isValidName($name);
     public function isValidEmail($email);
     public function isValidNumberOnly($number) ; 
-    // public function isValidEntryByNumberOnly($number);
-    // public function isValidAmountNumberOnly($number);
-    // public function isValidPhoneNumberOnly($number);
     public function isValidTextOnly($phone);
 
     public function isValidNote($note);

@@ -6,7 +6,23 @@ include('./classes/DbConfig.php');
 include('./classes/Crud.php');
 
 $crud = new Crud();
-$buyers = $crud->read();
+
+
+
+$searchId = isset($_GET['id']) ? trim($_GET['id']) : '';
+
+
+
+if ($searchId == null) {
+    $buyers = $crud->read();
+} else {
+    $buyers = $crud->search($searchId);
+}
+
+
+
+
+
 
 ?>
 
@@ -14,23 +30,31 @@ $buyers = $crud->read();
     <div class="row">
         <div class="col-12 mx-auto mt-3">
             <div class="text-center">
-                <h2> All Users</h2>
+                <h2> All Buyers</h2>
             </div>
 
         </div>
         <div class="col-md-2">
             <div class="text-start my-2">
-                <a href='add.php' class="btn btn-success text-capitalize">
-                    add user
-                </a>
+                <?php if ($searchId == null): ?>
+                    <a href='add.php' class="btn btn-success text-capitalize">
+                        add Buyers
+                    </a>
+                <?php else: ?>
+                    <a href='index.php' class="btn btn-primary text-capitalize">
+                        back
+                    </a>
+                <?php endif ?>
+
+
             </div>
         </div>
-        <div class="col-md-6 ms-auto align-items-center d-flex" >
+        <div class="col-md-6 ms-auto align-items-center d-flex">
             <div class="w-100">
-                <form action="" method="get">
+                <form method="get">
                     <div class="d-flex gap-2">
                         <div class="w-100">
-                            <input type="text" class="form-control" placeholder="Please search here">
+                            <input type="text" name="id" class="form-control" placeholder="Please search with user id">
                         </div>
                         <div>
                             <button type="submit" class="btn btn-info text-white">Search</button>
@@ -38,6 +62,14 @@ $buyers = $crud->read();
                     </div>
                 </form>
             </div>
+
+            <!-- <div>
+                <form method="get">
+                    <input type="text" name="search" placeholder="Search">
+                    <button type="submit">Search</button>
+                </form>
+            </div> -->
+
         </div>
         <div class="col-12 mx-auto mt-3">
 
@@ -46,6 +78,7 @@ $buyers = $crud->read();
                     <table class="table table-success table-striped">
                         <thead>
                             <tr>
+                                <th>Id </th>
                                 <th>Name </th>
                                 <th>Email </th>
                                 <th>Phone</th>
@@ -63,8 +96,9 @@ $buyers = $crud->read();
                         <tbody>
                             <?php foreach ($buyers as $buyer): ?>
                                 <tr>
+                                    <td><?php echo $buyer['id'] ?></td>
                                     <td><?php echo $buyer['buyer'] ?></td>
-                                    <td><?php echo $buyer['email'] ?></td>
+                                    <td><?php echo $buyer['buyer_email'] ?></td>
                                     <td><?php echo $buyer['phone'] ?></td>
                                     <td><?php echo $buyer['city'] ?></td>
                                     <td><?php echo $buyer['buyer_ip'] ?></td>
